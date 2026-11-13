@@ -1,5 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:sankargrp_app/services/solar_api_service.dart';
 import 'package:sankargrp_app/widgets/custom_button.dart';
 import 'package:sankargrp_app/widgets/custom_text_field.dart';
 import 'package:sankargrp_app/widgets/responsive.dart';
@@ -7,6 +9,7 @@ import 'package:sankargrp_app/screens/auth/widgets/mierae_brand_header.dart';
 import 'package:sankargrp_app/screens/auth/widgets/auth_segmented_control.dart';
 import 'package:sankargrp_app/screens/auth/widgets/guest_button.dart';
 import 'package:sankargrp_app/screens/auth/widgets/eco_friendly_background.dart';
+import 'package:sankargrp_app/screens/auth/otp/otp_verification_screen.dart';
 import 'package:sankargrp_app/screens/dashboard/main_dashboard_screen.dart';
 
 class AuthScreen extends StatefulWidget {
@@ -14,7 +17,7 @@ class AuthScreen extends StatefulWidget {
 
   const AuthScreen({
     super.key,
-    this.initialIsLogin = false,
+    this.initialIsLogin = true,
   });
 
   @override
@@ -22,76 +25,87 @@ class AuthScreen extends StatefulWidget {
 }
 
 class _AuthScreenState extends State<AuthScreen> {
-  late bool _isLogin;
-
-  // Controllers
+  late bool _isLoginSelected;
   final _nameController = TextEditingController();
   final _phoneController = TextEditingController();
-  final _emailController = TextEditingController();
-  final _passwordController = TextEditingController();
 
-  String? _phoneError;
   bool _isLoading = false;
+  String? _nameError;
+  String? _phoneError;
 
   static const Color brandNavy = Color(0xFF0F2238);
-  static const Color brandYellow = Color(0xFFF5A623);
+  static const Color brandYellow = Color(0xFFFBBF24);
 
   @override
   void initState() {
     super.initState();
-    _isLogin = widget.initialIsLogin;
+    _isLoginSelected = widget.initialIsLogin;
   }
 
   @override
   void dispose() {
     _nameController.dispose();
     _phoneController.dispose();
-    _emailController.dispose();
-    _passwordController.dispose();
     super.dispose();
   }
 
-  void _switchTab(bool isLogin) {
-    if (_isLogin == isLogin) return;
-    setState(() {
-      _isLogin = isLogin;
-      _phoneError = null;
-    });
-  }
+  void _requestOtp() async {
+    HapticFeedback.lightImpact();
+    final phone = _phoneController.text.trim();
+    final name = _nameController.text.trim();
 
-  void _handleSubmit() async {
-    if (!_isLogin) {
-      final phone = _phoneController.text.trim();
-      if (phone.isEmpty || phone.length < 10) {
-        setState(() {
-          _phoneError = 'Please enter a valid mobile number';
-        });
-        return;
-      } else {
-        setState(() {
-          _phoneError = null;
-        });
-      }
+    bool hasError = false;
+
+    if (!_isLoginSelected && name.isEmpty) {
+      setState(() => _nameError = 'Please enter your full name');
+      hasError = true;
+    } else {
+      setState(() => _nameError = null);
+    }
+
+    if (phone.isEmpty || phone.length < 10) {
+      setState(() {
+        _phoneError = 'Please enter a valid 10-digit mobile number';
+      });
+      hasError = true;
+    } else {
+      setState(() => _phoneError = null);
+    }
+
+    if (hasError) {
+      HapticFeedback.vibrate();
+      return;
     }
 
     setState(() => _isLoading = true);
-    await Future.delayed(const Duration(milliseconds: 500));
-    if (!mounted) return;
-    setState(() => _isLoading = false);
 
-    final enteredName = _nameController.text.trim();
-    final displayName = enteredName.isNotEmpty
-        ? enteredName
-        : (_isLogin ? 'Solar Partner' : 'New Member');
+    try {
+      final res = await SolarApiService.sendOtp(
+        phone,
+        fullName: !_isLoginSelected ? name : null,
+        isSignUp: !_isLoginSelected,
+      );
+      if (!mounted) return;
+      setState(() => _isLoading = false);
 
-    Navigator.of(context).pushReplacement(
-      CupertinoPageRoute(
-        builder: (_) => MainDashboardScreen(
-          isGuest: false,
-          userName: displayName,
+      final dynamicOtp = res['otp']?.toString();
+
+      Navigator.of(context).push(
+        CupertinoPageRoute(
+          builder: (_) => OtpVerificationScreen(
+            phone: phone,
+            initialOtpHint: dynamicOtp,
+          ),
         ),
-      ),
-    );
+      );
+    } on SolarApiException catch (e) {
+      if (!mounted) return;
+      setState(() {
+        _isLoading = false;
+        _phoneError = e.message;
+      });
+      HapticFeedback.vibrate();
+    }
   }
 
   @override
@@ -99,21 +113,19 @@ class _AuthScreenState extends State<AuthScreen> {
     final cardWidth = Responsive.maxCardWidth(context);
 
     return Scaffold(
-      backgroundColor: const Color(0xFFF4F7F5),
+      backgroundColor: const Color(0xFFF6F8F7), // Neutral iOS secondary background
       body: Stack(
         children: [
-          // Eco background painter
           const Positioned.fill(
             child: CustomPaint(
               painter: EcoFriendlyBackgroundPainter(),
             ),
           ),
-
           SafeArea(
             child: Center(
               child: SingleChildScrollView(
                 physics: const BouncingScrollPhysics(),
-                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 14),
                 child: ConstrainedBox(
                   constraints: BoxConstraints(maxWidth: cardWidth),
                   child: Column(
@@ -138,7 +150,8 @@ class _AuthScreenState extends State<AuthScreen> {
                                 vertical: 4,
                               ),
                               decoration: BoxDecoration(
-                                color: const Color(0xFF10B981).withValues(alpha: 0.12),
+                                color: const Color(0xFF10B981)
+                                    .withValues(alpha: 0.12),
                                 borderRadius: BorderRadius.circular(16),
                               ),
                               child: Row(
@@ -155,7 +168,9 @@ class _AuthScreenState extends State<AuthScreen> {
                                     style: TextStyle(
                                       fontSize: 11,
                                       fontWeight: FontWeight.w600,
+                                      fontFamily: 'SF Pro Display',
                                       color: Color(0xFF059669),
+                                      decoration: TextDecoration.none,
                                     ),
                                   ),
                                 ],
@@ -164,120 +179,138 @@ class _AuthScreenState extends State<AuthScreen> {
                           ],
                         ),
                       ),
-                      const SizedBox(height: 12),
+                      const SizedBox(height: 16),
 
-                      // Centered Elevated Card
+                      // iOS Platter Card
                       Container(
                         decoration: BoxDecoration(
                           color: Colors.white,
-                          borderRadius: BorderRadius.circular(22),
+                          borderRadius: BorderRadius.circular(24),
+                          border: Border.all(
+                            color: const Color(0xFFE2E8F0),
+                            width: 1.0,
+                          ),
                           boxShadow: [
                             BoxShadow(
-                              color: const Color(0xFF0F2238).withValues(alpha: 0.06),
-                              blurRadius: 20,
-                              offset: const Offset(0, 6),
+                              color: const Color(0xFF0F2238)
+                                  .withValues(alpha: 0.05),
+                              blurRadius: 24,
+                              offset: const Offset(0, 8),
                             ),
                           ],
                         ),
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 20,
-                          vertical: 20,
-                        ),
+                        padding: const EdgeInsets.all(24),
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.stretch,
                           mainAxisSize: MainAxisSize.min,
                           children: [
-                            // Animated Title & Subtitle
-                            AnimatedSwitcher(
-                              duration: const Duration(milliseconds: 250),
-                              transitionBuilder: (child, animation) {
-                                return FadeTransition(
-                                  opacity: animation,
-                                  child: SlideTransition(
-                                    position: Tween<Offset>(
-                                      begin: const Offset(0, 0.08),
-                                      end: Offset.zero,
-                                    ).animate(animation),
-                                    child: child,
-                                  ),
-                                );
-                              },
-                              child: Column(
-                                key: ValueKey<bool>(_isLogin),
-                                crossAxisAlignment: CrossAxisAlignment.stretch,
-                                children: [
-                                  Text(
-                                    _isLogin
-                                        ? 'Welcome back'
-                                        : 'Create your account',
-                                    style: const TextStyle(
-                                      fontSize: 22,
-                                      fontWeight: FontWeight.w800,
-                                      letterSpacing: -0.4,
-                                      color: brandNavy,
-                                    ),
-                                  ),
-                                  const SizedBox(height: 4),
-                                  Text(
-                                    _isLogin
-                                        ? 'Log in to manage your solar journey'
-                                        : 'Start your solar journey today',
-                                    style: const TextStyle(
-                                      fontSize: 13,
-                                      fontWeight: FontWeight.w400,
-                                      color: Color(0xFF64748B),
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                            const SizedBox(height: 16),
-
-                            // Segmented Switch
+                            // iOS Segmented Switch: Log In / Sign Up
                             AuthSegmentedControl(
-                              isLoginSelected: _isLogin,
-                              onLoginTap: () => _switchTab(true),
-                              onSignUpTap: () => _switchTab(false),
+                              isLoginSelected: _isLoginSelected,
+                              onLoginTap: () {
+                                if (!_isLoginSelected) {
+                                  HapticFeedback.selectionClick();
+                                  setState(() {
+                                    _isLoginSelected = true;
+                                    _nameError = null;
+                                    _phoneError = null;
+                                  });
+                                }
+                              },
+                              onSignUpTap: () {
+                                if (_isLoginSelected) {
+                                  HapticFeedback.selectionClick();
+                                  setState(() {
+                                    _isLoginSelected = false;
+                                    _nameError = null;
+                                    _phoneError = null;
+                                  });
+                                }
+                              },
                             ),
-                            const SizedBox(height: 16),
+                            const SizedBox(height: 20),
 
-                            // Form Fields with AnimatedSwitcher for smooth transition
-                            AnimatedSize(
-                              duration: const Duration(milliseconds: 280),
-                              curve: Curves.easeInOutCubic,
-                              child: AnimatedSwitcher(
-                                duration: const Duration(milliseconds: 240),
-                                switchInCurve: Curves.easeIn,
-                                switchOutCurve: Curves.easeOut,
-                                transitionBuilder: (child, animation) {
-                                  return FadeTransition(
-                                    opacity: animation,
-                                    child: child,
-                                  );
-                                },
-                                child: _isLogin
-                                    ? _buildLoginForm()
-                                    : _buildSignUpForm(),
+                            Text(
+                              _isLoginSelected ? 'Sign In with Mobile' : 'Create an Account',
+                              style: const TextStyle(
+                                fontSize: 24,
+                                fontWeight: FontWeight.w800,
+                                fontFamily: 'SF Pro Display',
+                                letterSpacing: -0.5,
+                                color: brandNavy,
+                                decoration: TextDecoration.none,
                               ),
                             ),
-                            const SizedBox(height: 16),
+                            const SizedBox(height: 6),
+                            Text(
+                              _isLoginSelected
+                                  ? 'We will send a 4-digit verification code to your phone'
+                                  : 'Join Mierae Solar to manage installations & view clean energy stats',
+                              style: const TextStyle(
+                                fontSize: 13,
+                                fontWeight: FontWeight.w400,
+                                fontFamily: 'SF Pro Display',
+                                color: Color(0xFF64748B),
+                                height: 1.35,
+                                decoration: TextDecoration.none,
+                              ),
+                            ),
+                            const SizedBox(height: 22),
 
-                            // Primary Action Button
+                            // Name field (Only shown for Sign Up)
+                            AnimatedCrossFade(
+                              duration: const Duration(milliseconds: 220),
+                              crossFadeState: !_isLoginSelected
+                                  ? CrossFadeState.showFirst
+                                  : CrossFadeState.showSecond,
+                              firstChild: Padding(
+                                padding: const EdgeInsets.only(bottom: 16),
+                                child: CustomTextField(
+                                  controller: _nameController,
+                                  placeholder: 'Full Name',
+                                  prefixIcon: CupertinoIcons.person_fill,
+                                  errorMessage: _nameError,
+                                  onChanged: (val) {
+                                    if (_nameError != null) {
+                                      setState(() => _nameError = null);
+                                    }
+                                  },
+                                ),
+                              ),
+                              secondChild: const SizedBox.shrink(),
+                            ),
+
+                            // Phone Input
+                            CustomTextField(
+                              controller: _phoneController,
+                              placeholder: 'Mobile Number (10 digits)',
+                              prefixIcon: CupertinoIcons.phone_fill,
+                              keyboardType: TextInputType.phone,
+                              errorMessage: _phoneError,
+                              onChanged: (val) {
+                                if (_phoneError != null) {
+                                  setState(() => _phoneError = null);
+                                }
+                              },
+                            ),
+                            const SizedBox(height: 22),
+
+                            // Get OTP Button
                             CustomButton(
-                              label: _isLogin ? 'Log in' : 'Sign up',
+                              label: _isLoginSelected ? 'Send Verification OTP' : 'Sign Up with OTP',
                               isLoading: _isLoading,
                               backgroundColor: brandYellow,
                               textColor: brandNavy,
                               borderRadius: 24,
-                              height: 46,
+                              height: 50,
                               icon: const Icon(
-                                Icons.solar_power_outlined,
+                                CupertinoIcons.arrow_right_circle_fill,
                                 size: 18,
                                 color: brandNavy,
                               ),
-                              onPressed: _handleSubmit,
+                              onPressed: _requestOtp,
                             ),
-                            const SizedBox(height: 14),
+                            const SizedBox(height: 18),
 
                             // "or" Divider
                             Row(
@@ -298,6 +331,7 @@ class _AuthScreenState extends State<AuthScreen> {
                                       fontSize: 11.5,
                                       fontWeight: FontWeight.w500,
                                       color: Colors.grey.shade400,
+                                      decoration: TextDecoration.none,
                                     ),
                                   ),
                                 ),
@@ -309,12 +343,13 @@ class _AuthScreenState extends State<AuthScreen> {
                                 ),
                               ],
                             ),
-                            const SizedBox(height: 14),
+                            const SizedBox(height: 16),
 
                             // Continue as guest Button
                             GuestButton(
                               borderRadius: 24,
                               onPressed: () {
+                                HapticFeedback.selectionClick();
                                 Navigator.of(context).pushReplacement(
                                   CupertinoPageRoute(
                                     builder: (_) => const MainDashboardScreen(
@@ -328,7 +363,7 @@ class _AuthScreenState extends State<AuthScreen> {
                           ],
                         ),
                       ),
-                      const SizedBox(height: 12),
+                      const SizedBox(height: 16),
 
                       // Footer
                       Row(
@@ -345,8 +380,10 @@ class _AuthScreenState extends State<AuthScreen> {
                             style: TextStyle(
                               fontSize: 11.5,
                               fontWeight: FontWeight.w600,
+                              fontFamily: 'SF Pro Display',
                               color: Colors.grey.shade600,
                               letterSpacing: -0.2,
+                              decoration: TextDecoration.none,
                             ),
                           ),
                         ],
@@ -359,89 +396,6 @@ class _AuthScreenState extends State<AuthScreen> {
           ),
         ],
       ),
-    );
-  }
-
-  Widget _buildSignUpForm() {
-    return Column(
-      key: const ValueKey('signup_form'),
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        CustomTextField(
-          controller: _nameController,
-          placeholder: 'Full name',
-          prefixIcon: CupertinoIcons.person,
-          keyboardType: TextInputType.name,
-        ),
-        const SizedBox(height: 10),
-        CustomTextField(
-          controller: _phoneController,
-          placeholder: 'Phone number',
-          prefixIcon: CupertinoIcons.phone,
-          keyboardType: TextInputType.phone,
-          errorMessage: _phoneError,
-          onChanged: (val) {
-            if (_phoneError != null) {
-              setState(() => _phoneError = null);
-            }
-          },
-        ),
-        const SizedBox(height: 10),
-        CustomTextField(
-          controller: _emailController,
-          placeholder: 'Email address',
-          prefixIcon: CupertinoIcons.mail,
-          keyboardType: TextInputType.emailAddress,
-        ),
-        const SizedBox(height: 10),
-        CustomTextField(
-          controller: _passwordController,
-          placeholder: 'Password',
-          prefixIcon: CupertinoIcons.lock,
-          isPassword: true,
-          textInputAction: TextInputAction.done,
-        ),
-      ],
-    );
-  }
-
-  Widget _buildLoginForm() {
-    return Column(
-      key: const ValueKey('login_form'),
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        CustomTextField(
-          controller: _emailController,
-          placeholder: 'Email address',
-          prefixIcon: CupertinoIcons.mail,
-          keyboardType: TextInputType.emailAddress,
-        ),
-        const SizedBox(height: 10),
-        CustomTextField(
-          controller: _passwordController,
-          placeholder: 'Password',
-          prefixIcon: CupertinoIcons.lock,
-          isPassword: true,
-          textInputAction: TextInputAction.done,
-        ),
-        const SizedBox(height: 6),
-        Align(
-          alignment: Alignment.centerRight,
-          child: CupertinoButton(
-            padding: const EdgeInsets.symmetric(vertical: 4),
-            minimumSize: Size.zero,
-            onPressed: () {},
-            child: const Text(
-              'Forgot password?',
-              style: TextStyle(
-                fontSize: 12,
-                fontWeight: FontWeight.w600,
-                color: Color(0xFF0F2238),
-              ),
-            ),
-          ),
-        ),
-      ],
     );
   }
 }

@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import '../auth/login/login_screen.dart';
+import 'widgets/liquid_glass_nav_bar.dart';
 
 class MainDashboardScreen extends StatefulWidget {
   final bool isGuest;
@@ -19,7 +19,6 @@ class MainDashboardScreen extends StatefulWidget {
 
 class _MainDashboardScreenState extends State<MainDashboardScreen> {
   int _currentIndex = 0;
-  final GlobalKey<CurvedNavigationBarState> _bottomNavKey = GlobalKey();
 
   static const Color brandNavy = Color(0xFF0F2238);
   static const Color brandYellow = Color(0xFFF5A623);
@@ -177,6 +176,10 @@ class _MainDashboardScreenState extends State<MainDashboardScreen> {
 
   @override
   Widget build(BuildContext context) {
+    // Dynamically calculate bottom padding so content never collides with floating glass nav
+    final bottomInset = MediaQuery.paddingOf(context).bottom;
+    final totalBottomPadding = 66.0 + (bottomInset > 0 ? bottomInset + 16 : 28.0);
+
     return Scaffold(
       backgroundColor: const Color(0xFFF4F7F5),
       body: Stack(
@@ -212,61 +215,58 @@ class _MainDashboardScreenState extends State<MainDashboardScreen> {
             child: IndexedStack(
               index: _currentIndex,
               children: [
-                _buildHomeTab(),
-                _buildSolarProductsTab(),
-                _buildSavingsCalculatorTab(),
-                _buildProfileTab(),
+                _buildHomeTab(totalBottomPadding),
+                _buildSolarProductsTab(totalBottomPadding),
+                _buildSavingsCalculatorTab(totalBottomPadding),
+                _buildProfileTab(totalBottomPadding),
+              ],
+            ),
+          ),
+
+          // Floating iOS Liquid Glass Navbar anchored above system buttons
+          Positioned(
+            left: 0,
+            right: 0,
+            bottom: 0,
+            child: LiquidGlassNavBar(
+              selectedIndex: _currentIndex,
+              onItemSelected: (index) {
+                setState(() => _currentIndex = index);
+              },
+              items: const [
+                LiquidGlassNavBarItem(
+                  icon: Icons.home_outlined,
+                  activeIcon: Icons.home_rounded,
+                  label: 'Home',
+                ),
+                LiquidGlassNavBarItem(
+                  icon: Icons.shopping_bag_outlined,
+                  activeIcon: Icons.shopping_bag_rounded,
+                  label: 'Systems',
+                ),
+                LiquidGlassNavBarItem(
+                  icon: Icons.calculate_outlined,
+                  activeIcon: Icons.calculate_rounded,
+                  label: 'Estimator',
+                ),
+                LiquidGlassNavBarItem(
+                  icon: Icons.person_outline_rounded,
+                  activeIcon: Icons.person_rounded,
+                  label: 'Account',
+                ),
               ],
             ),
           ),
         ],
       ),
-      bottomNavigationBar: CurvedNavigationBar(
-        key: _bottomNavKey,
-        index: _currentIndex,
-        height: 62.0,
-        items: <Widget>[
-          Icon(
-            Icons.home_rounded,
-            size: 26,
-            color: _currentIndex == 0 ? Colors.white : const Color(0xFF64748B),
-          ),
-          Icon(
-            Icons.shopping_bag_rounded,
-            size: 26,
-            color: _currentIndex == 1 ? Colors.white : const Color(0xFF64748B),
-          ),
-          Icon(
-            Icons.calculate_rounded,
-            size: 26,
-            color: _currentIndex == 2 ? Colors.white : const Color(0xFF64748B),
-          ),
-          Icon(
-            Icons.person_rounded,
-            size: 26,
-            color: _currentIndex == 3 ? Colors.white : const Color(0xFF64748B),
-          ),
-        ],
-        color: Colors.white,
-        buttonBackgroundColor: brandYellow,
-        backgroundColor: const Color(0xFFF4F7F5),
-        animationCurve: Curves.easeInOutCubic,
-        animationDuration: const Duration(milliseconds: 380),
-        onTap: (index) {
-          setState(() {
-            _currentIndex = index;
-          });
-        },
-        letIndexChange: (index) => true,
-      ),
     );
   }
 
   // TAB 1: Home Dashboard
-  Widget _buildHomeTab() {
+  Widget _buildHomeTab(double bottomPadding) {
     return SingleChildScrollView(
       physics: const BouncingScrollPhysics(),
-      padding: const EdgeInsets.fromLTRB(20, 16, 20, 90),
+      padding: EdgeInsets.fromLTRB(20, 16, 20, bottomPadding),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
@@ -603,10 +603,10 @@ class _MainDashboardScreenState extends State<MainDashboardScreen> {
   }
 
   // TAB 2: Solar Products / Order Tab
-  Widget _buildSolarProductsTab() {
+  Widget _buildSolarProductsTab(double bottomPadding) {
     return SingleChildScrollView(
       physics: const BouncingScrollPhysics(),
-      padding: const EdgeInsets.fromLTRB(20, 16, 20, 90),
+      padding: EdgeInsets.fromLTRB(20, 16, 20, bottomPadding),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
@@ -669,10 +669,10 @@ class _MainDashboardScreenState extends State<MainDashboardScreen> {
   }
 
   // TAB 3: Solar Calculator Tab
-  Widget _buildSavingsCalculatorTab() {
+  Widget _buildSavingsCalculatorTab(double bottomPadding) {
     return SingleChildScrollView(
       physics: const BouncingScrollPhysics(),
-      padding: const EdgeInsets.fromLTRB(20, 16, 20, 90),
+      padding: EdgeInsets.fromLTRB(20, 16, 20, bottomPadding),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
@@ -818,10 +818,10 @@ class _MainDashboardScreenState extends State<MainDashboardScreen> {
   }
 
   // TAB 4: Profile Tab
-  Widget _buildProfileTab() {
+  Widget _buildProfileTab(double bottomPadding) {
     return SingleChildScrollView(
       physics: const BouncingScrollPhysics(),
-      padding: const EdgeInsets.fromLTRB(20, 16, 20, 90),
+      padding: EdgeInsets.fromLTRB(20, 16, 20, bottomPadding),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [

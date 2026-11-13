@@ -6,6 +6,7 @@ import '../../services/solar_api_service.dart';
 import '../auth/login/login_screen.dart';
 import '../listing/listing_screen.dart';
 import 'widgets/home_dashboard_view.dart';
+import 'widgets/ios_profile_view.dart';
 
 class MainDashboardScreen extends StatefulWidget {
   final bool isGuest;
@@ -39,19 +40,19 @@ class _MainDashboardScreenState extends State<MainDashboardScreen> {
       label: 'Home',
     ),
     GlassTab(
-      icon: Icon(CupertinoIcons.sun_max),
-      activeIcon: Icon(CupertinoIcons.sun_max_fill),
-      label: 'Systems',
+      icon: Icon(CupertinoIcons.cube_box),
+      activeIcon: Icon(CupertinoIcons.cube_box_fill),
+      label: 'Packages',
     ),
     GlassTab(
-      icon: Icon(CupertinoIcons.chart_bar_alt_fill),
-      activeIcon: Icon(CupertinoIcons.chart_bar_fill),
-      label: 'Estimator',
+      icon: Icon(CupertinoIcons.slider_horizontal_below_rectangle),
+      activeIcon: Icon(CupertinoIcons.slider_horizontal_below_rectangle),
+      label: 'Calculator',
     ),
     GlassTab(
       icon: Icon(CupertinoIcons.person),
       activeIcon: Icon(CupertinoIcons.person_fill),
-      label: 'Account',
+      label: 'Profile',
     ),
   ];
 
@@ -162,84 +163,54 @@ class _MainDashboardScreenState extends State<MainDashboardScreen> {
       body: SafeArea(
         child: Column(
           children: [
-            // Top Header: Pure Sans-Serif Title with NO decoration/underline
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 14),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    _getTitleForIndex(_currentIndex),
-                    style: const TextStyle(
-                      fontSize: 28,
-                      fontWeight: FontWeight.w800,
-                      fontFamily: 'SF Pro Display',
-                      color: brandNavy,
-                      letterSpacing: -0.6,
-                      decoration: TextDecoration.none,
-                    ),
-                  ),
-                  if (_currentIndex == 0 && widget.isGuest)
-                    CupertinoButton(
-                      padding: EdgeInsets.zero,
-                      onPressed: _navigateToLogin,
-                      child: Container(
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 14, vertical: 8),
-                        decoration: BoxDecoration(
-                          color: brandNavy,
-                          borderRadius: BorderRadius.circular(18),
-                        ),
-                        child: const Row(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            Text(
-                              'Log in',
-                              style: TextStyle(
-                                fontSize: 13,
-                                fontWeight: FontWeight.w700,
-                                fontFamily: 'SF Pro Display',
-                                color: Colors.white,
-                                decoration: TextDecoration.none,
-                              ),
-                            ),
-                            SizedBox(width: 4),
-                            Icon(CupertinoIcons.arrow_right,
-                                size: 14, color: Colors.white),
-                          ],
-                        ),
+            // Top Header only shown on sub-tabs, since Home has its own rich greeting header matching the reference
+            if (_currentIndex != 0)
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 14),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      _getTitleForIndex(_currentIndex),
+                      style: const TextStyle(
+                        fontSize: 28,
+                        fontWeight: FontWeight.w800,
+                        fontFamily: 'SF Pro Display',
+                        color: brandNavy,
+                        letterSpacing: -0.6,
+                        decoration: TextDecoration.none,
                       ),
                     ),
-                  if (_currentIndex == 3)
-                    CupertinoButton(
-                      padding: EdgeInsets.zero,
-                      onPressed: _navigateToLogin,
-                      child: Container(
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 14, vertical: 8),
-                        decoration: BoxDecoration(
-                          color: widget.isGuest
-                              ? brandYellow
-                              : const Color(0xFFF1F5F9),
-                          borderRadius: BorderRadius.circular(18),
-                        ),
-                        child: Text(
-                          widget.isGuest ? 'Log in' : 'Log out',
-                          style: TextStyle(
-                            fontSize: 13,
-                            fontWeight: FontWeight.w700,
-                            fontFamily: 'SF Pro Display',
+                    if (_currentIndex == 3)
+                      CupertinoButton(
+                        padding: EdgeInsets.zero,
+                        onPressed: _navigateToLogin,
+                        child: Container(
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 14, vertical: 8),
+                          decoration: BoxDecoration(
                             color: widget.isGuest
-                                ? brandNavy
-                                : const Color(0xFFDC2626),
-                            decoration: TextDecoration.none,
+                                ? brandYellow
+                                : const Color(0xFFF1F5F9),
+                            borderRadius: BorderRadius.circular(18),
+                          ),
+                          child: Text(
+                            widget.isGuest ? 'Log in' : 'Log out',
+                            style: TextStyle(
+                              fontSize: 13,
+                              fontWeight: FontWeight.w700,
+                              fontFamily: 'SF Pro Display',
+                              color: widget.isGuest
+                                  ? brandNavy
+                                  : const Color(0xFFDC2626),
+                              decoration: TextDecoration.none,
+                            ),
                           ),
                         ),
                       ),
-                    ),
-                ],
+                  ],
+                ),
               ),
-            ),
 
             // Main Content Area
             Expanded(
@@ -252,9 +223,13 @@ class _MainDashboardScreenState extends State<MainDashboardScreen> {
                     featuredSystems: _solarSystems,
                     isLoading: _isLoading,
                     errorMessage: _errorMessage,
+                    userName: widget.userName,
                     onRefresh: _fetchData,
                     onExploreAll: () {
                       setState(() => _currentIndex = 1);
+                    },
+                    onNavigateTab: (tabIndex) {
+                      setState(() => _currentIndex = tabIndex);
                     },
                   ),
 
@@ -269,8 +244,12 @@ class _MainDashboardScreenState extends State<MainDashboardScreen> {
                   // 3. Estimator Tab
                   _buildEstimatorView(),
 
-                  // 4. Account Tab
-                  _buildAccountView(),
+                  // 4. iOS Profile Tab
+                  IosProfileView(
+                    isGuest: widget.isGuest,
+                    userName: widget.userName,
+                    onSignOutOrLogin: _navigateToLogin,
+                  ),
                 ],
               ),
             ),
@@ -285,11 +264,11 @@ class _MainDashboardScreenState extends State<MainDashboardScreen> {
       case 0:
         return 'Home';
       case 1:
-        return 'Solar Systems';
+        return 'Packages';
       case 2:
-        return 'Estimator';
+        return 'Calculator';
       case 3:
-        return 'Account';
+        return 'Profile';
       default:
         return 'Dashboard';
     }
@@ -432,61 +411,6 @@ class _MainDashboardScreenState extends State<MainDashboardScreen> {
             ),
           ],
         ),
-      ),
-    );
-  }
-
-  Widget _buildAccountView() {
-    return SingleChildScrollView(
-      physics: const BouncingScrollPhysics(),
-      padding: const EdgeInsets.fromLTRB(20, 10, 20, 110),
-      child: Column(
-        children: [
-          Container(
-            padding: const EdgeInsets.all(22),
-            decoration: BoxDecoration(
-              color: const Color(0xFFF8FAFC),
-              borderRadius: BorderRadius.circular(22),
-              border: Border.all(color: const Color(0xFFE2E8F0)),
-            ),
-            child: Column(
-              children: [
-                CircleAvatar(
-                  radius: 36,
-                  backgroundColor: brandYellow.withValues(alpha: 0.2),
-                  child: const Icon(
-                    CupertinoIcons.person_fill,
-                    size: 38,
-                    color: brandNavy,
-                  ),
-                ),
-                const SizedBox(height: 12),
-                Text(
-                  widget.isGuest ? 'Guest User' : widget.userName,
-                  style: const TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.w800,
-                    fontFamily: 'SF Pro Display',
-                    color: brandNavy,
-                    decoration: TextDecoration.none,
-                  ),
-                ),
-                const SizedBox(height: 4),
-                Text(
-                  widget.isGuest
-                      ? 'Browsing Mode'
-                      : 'solar.customer@mierae.com',
-                  style: const TextStyle(
-                    fontSize: 13,
-                    fontFamily: 'SF Pro Display',
-                    color: Color(0xFF64748B),
-                    decoration: TextDecoration.none,
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ],
       ),
     );
   }

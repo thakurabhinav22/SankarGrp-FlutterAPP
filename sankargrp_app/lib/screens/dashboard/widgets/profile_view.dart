@@ -2,12 +2,12 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
-class IosProfileView extends StatefulWidget {
+class ProfileView extends StatefulWidget {
   final bool isGuest;
   final String userName;
   final VoidCallback onSignOutOrLogin;
 
-  const IosProfileView({
+  const ProfileView({
     super.key,
     required this.isGuest,
     required this.userName,
@@ -15,19 +15,19 @@ class IosProfileView extends StatefulWidget {
   });
 
   @override
-  State<IosProfileView> createState() => _IosProfileViewState();
+  State<ProfileView> createState() => _ProfileViewState();
 }
 
-class _IosProfileViewState extends State<IosProfileView> {
+class _ProfileViewState extends State<ProfileView> {
   bool _gridTelemetryNotifications = true;
   bool _peakTariffAlerts = true;
   bool _biometricUnlock = false;
 
   static const Color brandNavy = Color(0xFF0F172A);
   static const Color brandYellow = Color(0xFFFBBF24);
-  static const Color iosCardBg = Colors.white;
-  static const Color iosBorderColor = Color(0xFFE2E8F0);
-  static const Color iosChevronColor = Color(0xFFC7C7CC);
+  static const Color cardBg = Colors.white;
+  static const Color borderColor = Color(0xFFE2E8F0);
+  static const Color chevronColor = Color(0xFFC7C7CC);
 
   void _showComingSoon(String title) {
     HapticFeedback.lightImpact();
@@ -89,7 +89,7 @@ class _IosProfileViewState extends State<IosProfileView> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          // 1. iOS Profile Hero Platter Card
+          // 1. Profile Hero Platter Card
           _buildHeroUserCard(),
           const SizedBox(height: 18),
 
@@ -100,28 +100,28 @@ class _IosProfileViewState extends State<IosProfileView> {
           // 3. Section: Solar & Energy Services
           _buildSectionHeader('SOLAR & POWER METRICS'),
           _buildGroupedList([
-            _IosListRow(
+            _ProfileListRow(
               icon: CupertinoIcons.sun_max_fill,
               iconBgColor: const Color(0xFFF59E0B),
               title: 'My Solar Plant',
               trailingText: '3.3 kWp Active',
               onTap: () => _showComingSoon('My Solar Plant'),
             ),
-            _IosListRow(
+            _ProfileListRow(
               icon: CupertinoIcons.chart_pie_fill,
               iconBgColor: const Color(0xFF10B981),
               title: 'DISCOM Net-Metering Units',
               trailingText: '248 Units Exported',
               onTap: () => _showComingSoon('Net-Metering Units'),
             ),
-            _IosListRow(
+            _ProfileListRow(
               icon: CupertinoIcons.doc_plaintext,
               iconBgColor: const Color(0xFF3B82F6),
               title: 'PM Surya Ghar Subsidy Claim',
               trailingText: 'Approved (₹78k)',
               onTap: () => _showComingSoon('Subsidy Claim'),
             ),
-            _IosListRow(
+            _ProfileListRow(
               icon: CupertinoIcons.wrench_fill,
               iconBgColor: const Color(0xFF8B5CF6),
               title: 'Maintenance & Warranty',
@@ -134,7 +134,7 @@ class _IosProfileViewState extends State<IosProfileView> {
           // 4. Section: Preferences & Toggles
           _buildSectionHeader('PREFERENCES & TELEMETRY'),
           _buildGroupedList([
-            _IosListRow(
+            _ProfileListRow(
               icon: CupertinoIcons.bell_fill,
               iconBgColor: const Color(0xFFEF4444),
               title: 'Grid Telemetry Alerts',
@@ -147,7 +147,7 @@ class _IosProfileViewState extends State<IosProfileView> {
                 },
               ),
             ),
-            _IosListRow(
+            _ProfileListRow(
               icon: CupertinoIcons.bolt_fill,
               iconBgColor: const Color(0xFFFBBF24),
               title: 'Peak Tariff Optimization',
@@ -160,7 +160,7 @@ class _IosProfileViewState extends State<IosProfileView> {
                 },
               ),
             ),
-            _IosListRow(
+            _ProfileListRow(
               icon: CupertinoIcons.lock_shield_fill,
               iconBgColor: const Color(0xFF0F172A),
               title: 'Biometric App Lock',
@@ -179,20 +179,20 @@ class _IosProfileViewState extends State<IosProfileView> {
           // 5. Section: Support & Legal
           _buildSectionHeader('SUPPORT & SANKAR GROUP'),
           _buildGroupedList([
-            _IosListRow(
+            _ProfileListRow(
               icon: CupertinoIcons.phone_fill,
               iconBgColor: const Color(0xFF10B981),
               title: '24/7 Solar Engineer Support',
               trailingText: 'Call Dispatch',
               onTap: () => _showComingSoon('Engineer Helpline'),
             ),
-            _IosListRow(
+            _ProfileListRow(
               icon: CupertinoIcons.chat_bubble_2_fill,
               iconBgColor: const Color(0xFF0284C7),
               title: 'WhatsApp Engineering Desk',
               onTap: () => _showComingSoon('WhatsApp Chat'),
             ),
-            _IosListRow(
+            _ProfileListRow(
               icon: CupertinoIcons.shield_fill,
               iconBgColor: const Color(0xFF64748B),
               title: 'Privacy Policy & Terms',
@@ -269,14 +269,14 @@ class _IosProfileViewState extends State<IosProfileView> {
     );
   }
 
-  // --- 1. iOS User Card ---
+  // --- 1. User Card ---
   Widget _buildHeroUserCard() {
     return Container(
       padding: const EdgeInsets.all(18),
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(20),
-        border: Border.all(color: iosBorderColor, width: 1),
+        border: Border.all(color: borderColor, width: 1),
         boxShadow: [
           BoxShadow(
             color: Colors.black.withValues(alpha: 0.03),
@@ -384,7 +384,7 @@ class _IosProfileViewState extends State<IosProfileView> {
           ),
           const Icon(
             CupertinoIcons.chevron_right,
-            color: iosChevronColor,
+            color: chevronColor,
             size: 18,
           ),
         ],
@@ -412,7 +412,7 @@ class _IosProfileViewState extends State<IosProfileView> {
         decoration: BoxDecoration(
           color: Colors.white,
           borderRadius: BorderRadius.circular(16),
-          border: Border.all(color: iosBorderColor, width: 1),
+          border: Border.all(color: borderColor, width: 1),
           boxShadow: [
             BoxShadow(
               color: Colors.black.withValues(alpha: 0.02),
@@ -456,7 +456,7 @@ class _IosProfileViewState extends State<IosProfileView> {
     );
   }
 
-  // --- Helpers for iOS Grouped Inset Sections ---
+  // --- Helpers for Grouped Inset Sections ---
   Widget _buildSectionHeader(String title) {
     return Padding(
       padding: const EdgeInsets.only(left: 12, bottom: 8),
@@ -474,12 +474,12 @@ class _IosProfileViewState extends State<IosProfileView> {
     );
   }
 
-  Widget _buildGroupedList(List<_IosListRow> rows) {
+  Widget _buildGroupedList(List<_ProfileListRow> rows) {
     return Container(
       decoration: BoxDecoration(
-        color: iosCardBg,
+        color: cardBg,
         borderRadius: BorderRadius.circular(18),
-        border: Border.all(color: iosBorderColor, width: 1),
+        border: Border.all(color: borderColor, width: 1),
         boxShadow: [
           BoxShadow(
             color: Colors.black.withValues(alpha: 0.02),
@@ -547,7 +547,7 @@ class _IosProfileViewState extends State<IosProfileView> {
                         const Icon(
                           CupertinoIcons.chevron_right,
                           size: 15,
-                          color: iosChevronColor,
+                          color: chevronColor,
                         ),
                       ],
                     ],
@@ -571,7 +571,7 @@ class _IosProfileViewState extends State<IosProfileView> {
   }
 }
 
-class _IosListRow {
+class _ProfileListRow {
   final IconData icon;
   final Color iconBgColor;
   final String title;
@@ -579,7 +579,7 @@ class _IosListRow {
   final Widget? customTrailing;
   final VoidCallback? onTap;
 
-  const _IosListRow({
+  const _ProfileListRow({
     required this.icon,
     required this.iconBgColor,
     required this.title,

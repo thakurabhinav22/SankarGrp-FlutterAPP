@@ -6,7 +6,7 @@ import '../../services/solar_api_service.dart';
 import '../auth/login/login_screen.dart';
 import '../listing/listing_screen.dart';
 import 'widgets/home_dashboard_view.dart';
-import 'widgets/ios_profile_view.dart';
+import 'widgets/profile_view.dart';
 
 class MainDashboardScreen extends StatefulWidget {
   final bool isGuest;
@@ -244,8 +244,8 @@ class _MainDashboardScreenState extends State<MainDashboardScreen> {
                   // 3. Estimator Tab
                   _buildEstimatorView(),
 
-                  // 4. iOS Profile Tab
-                  IosProfileView(
+                  // 4. Profile Tab
+                  ProfileView(
                     isGuest: widget.isGuest,
                     userName: widget.userName,
                     onSignOutOrLogin: _navigateToLogin,

@@ -9,19 +9,16 @@
 
 ---
 
-## 🎥 App Demonstration Video & Live Screenshots
+## 🎥 App Demonstration Walkthrough & Live Screenshots
 
-### 📹 Remote Video Walkthrough
-Watch the end-to-end demo of authentication, OTP verification, live solar radiation weather cards, interactive category filtering, technical hardware details, and the frosted liquid glass navigation bar:
-
-- **Direct GitHub Video Link:** [docs/media/app_demo_walkthrough.mp4](https://github.com/thakurabhinav22/SankarGrpup-FlutterAPP/raw/main/docs/media/app_demo_walkthrough.mp4)
-- **Local File Path:** [docs/media/app_demo_walkthrough.mp4](docs/media/app_demo_walkthrough.mp4)
+### 📹 Auto-Playing App Walkthrough Demo
+Below is the continuous auto-playing demonstration showing mobile authentication, dynamic OTP validation, real-time solar radiation analytics, packages catalog filtering, and technical details:
 
 <p align="center">
-  <video src="https://github.com/thakurabhinav22/SankarGrpup-FlutterAPP/raw/main/docs/media/app_demo_walkthrough.mp4" width="340" controls="controls" poster="docs/media/home_dashboard.jpeg">
-    Your browser does not support the video tag. View the raw MP4 video <a href="https://github.com/thakurabhinav22/SankarGrpup-FlutterAPP/raw/main/docs/media/app_demo_walkthrough.mp4">here</a>.
-  </video>
+  <img src="docs/media/app_demo_walkthrough.gif" width="340" alt="Mierae Solar App Walkthrough Demo"/>
 </p>
+
+> *Tip: You can also download or view the original high-definition video file directly: [app_demo_walkthrough.mp4](docs/media/app_demo_walkthrough.mp4)*
 
 ---
 
@@ -31,15 +28,15 @@ Watch the end-to-end demo of authentication, OTP verification, live solar radiat
 | :---: | :---: | :---: |
 | <img src="docs/media/login_screen.jpeg" width="260" alt="Sign In and Sign Up Screen"/> | <img src="docs/media/otp_verification.jpeg" width="260" alt="4-Digit OTP Verification"/> | <img src="docs/media/home_dashboard.jpeg" width="260" alt="Home Dashboard Overview"/> |
 
-| 4. Solar Packages Listing | 5. Savings Calculator | 6. iOS Profile & Settings |
+| 4. Solar Packages Listing | 5. Savings Calculator | 6. Profile & Settings |
 | :---: | :---: | :---: |
-| <img src="docs/media/packages_listing.jpeg" width="260" alt="Solar Packages Listing"/> | <img src="docs/media/savings_calculator.jpeg" width="260" alt="Solar Savings Estimator and Calculator"/> | <img src="docs/media/profile_screen.jpeg" width="260" alt="iOS Profile and Telemetry Settings"/> |
+| <img src="docs/media/packages_listing.jpeg" width="260" alt="Solar Packages Listing"/> | <img src="docs/media/savings_calculator.jpeg" width="260" alt="Solar Savings Estimator and Calculator"/> | <img src="docs/media/profile_screen.jpeg" width="260" alt="Profile and Telemetry Settings"/> |
 
 ---
 
 ## 📌 Executive Summary
 
-**Mierae Solar** is a mobile application built for **Sankar Group** to digitalize rooftop solar adoption for residential, commercial, and agricultural users. The application delivers an Apple Human Interface Guideline (HIG) inspired user experience featuring a translucent **Liquid Glass navigation bar**, live **solar radiation weather analytics**, interactive **savings estimators**, **real OTP authentication**, and seamless **REST API integration** backed by a custom Node.js server.
+**Mierae Solar** is a mobile application built for **Sankar Group** to digitalize rooftop solar adoption for residential, commercial, and agricultural users. The application delivers a modern, fluid user experience featuring a translucent **Liquid Glass navigation bar**, live **solar radiation weather analytics**, interactive **savings estimators**, **real OTP authentication**, and seamless **REST API integration** backed by a custom Node.js server.
 
 ---
 
@@ -47,10 +44,10 @@ Watch the end-to-end demo of authentication, OTP verification, live solar radiat
 
 | Task | Requirement | Status | Implementation Details |
 | :--- | :--- | :---: | :--- |
-| **Task 1: Design & Setup** | Clean UI, custom splash screen, login/signup, Android responsiveness | ✅ Done | Apple-inspired theme, sans-serif typography (`SF Pro Display`), seamless launch splash without Android 12 blank delay, responsive screen adaptivity. |
-| **Task 2: Core Screens** | At least 4 functional screens | ✅ Done | **1.** Auth Screen (Login/Sign Up + 4-digit PIN OTP Verification)<br>**2.** Home Dashboard (Weather, solar radiation, quick actions, savings banner)<br>**3.** Solar Packages Listing (Filtering, live search, categories)<br>**4.** Details Screen (Full technical specs, hardware breakdown, booking modal)<br>**5.** iOS Profile Screen (Grouped telemetry, toggles, warranty). |
-| **Task 3: Functionality** | Navigation, input validation, search/filtering, state management | ✅ Done | Cupertino fluid page routes, regex phone/name validators, dynamic category filter, live search, haptic feedback on every tap. |
-| **Task 4: API Integration** | REST backend, dynamic data, loading states, error handling | ✅ Done | Custom modular Node.js REST API (`/api/solar-systems`, `/api/dashboard/summary`, `/api/auth/*`), zero mock silent fallback, Cupertino error cards with retry. |
+| **Task 1: Design & Setup** | Clean UI, custom splash screen, login/signup, Android responsiveness | ✅ Done | Modern clean theme, sans-serif typography (`SF Pro Display`), seamless launch splash without Android 12 blank delay, responsive screen adaptivity. |
+| **Task 2: Core Screens** | At least 4 functional screens | ✅ Done | **1.** Auth Screen (Login/Sign Up + 4-digit PIN OTP Verification)<br>**2.** Home Dashboard (Weather, solar radiation, quick actions, savings banner)<br>**3.** Solar Packages Listing (Filtering, live search, categories)<br>**4.** Details Screen (Full technical specs, hardware breakdown, booking modal)<br>**5.** Profile Screen (Grouped telemetry, toggles, warranty). |
+| **Task 3: Functionality** | Navigation, input validation, search/filtering, state management | ✅ Done | Fluid page routes, regex phone/name validators, dynamic category filter, live search, haptic feedback on every tap. |
+| **Task 4: API Integration** | REST backend, dynamic data, loading states, error handling | ✅ Done | Custom modular Node.js REST API (`/api/solar-systems`, `/api/dashboard/summary`, `/api/auth/*`), zero mock silent fallback, error cards with retry. |
 | **Task 5: Data Management** | Persistence, reusable widgets, clean architecture | ✅ Done | Session management, modular component breakdown (`widgets/`, `models/`, `services/`, `screens/`). |
 
 ---
@@ -84,12 +81,12 @@ Watch the end-to-end demo of authentication, OTP verification, live solar radiat
 - **Key Metrics Strip:** 3-column pill strip showing **Daily Yield**, **Govt. Subsidy**, and **CO₂ Saved**.
 - **Technical Specifications:** Clean table with system capacity, inverter type, grid synchronization, and roof space requirements.
 - **Engineered Hardware:** Highlighting Mono PERC / TopCon bifacial solar panels and IP65 dual-MPPT inverters.
-- **Interactive Sticky Bar:** Price summary with a **"Book Site Visit"** button opening an iOS modal sheet to schedule a rooftop inspection.
+- **Interactive Sticky Bar:** Price summary with a **"Book Site Visit"** button opening a confirmation sheet to schedule a rooftop inspection.
 
-### 5. iOS Profile & Settings Screen
+### 5. Profile & Settings Screen
 - **User Hero Card:** Verified member status, DISCOM connection identifier, and consumer number.
 - **Telemetry Metrics:** Lifetime generation (`14.2 MWh`), CO₂ offset (`12.8 Tons`), and financial savings.
-- **Grouped Inset Lists:** Native `CupertinoSwitch` toggles for grid telemetry alerts, peak tariff optimization, and biometric lock.
+- **Grouped Inset Lists:** Native switch toggles for grid telemetry alerts, peak tariff optimization, and biometric lock.
 
 ---
 
@@ -97,11 +94,11 @@ Watch the end-to-end demo of authentication, OTP verification, live solar radiat
 
 ### Frontend (Flutter)
 - **Framework:** Flutter 3.38+ / Dart 3.10+
-- **Design System:** Apple Human Interface Guidelines (Cupertino + Custom Material blends)
+- **Design System:** Custom clean design system with Cupertino & Material elements
 - **Key Packages:**
-  - `liquid_glass_widgets`: Translucent iOS liquid glass tab bar with refraction, specular highlights, and blur.
-  - `cupertino_icons`: Native Apple icons.
-  - `http`: Asynchronous REST client with automatic timeout and fallback resolution.
+  - `liquid_glass_widgets`: Translucent frosted liquid glass navigation bar with refraction and blur.
+  - `cupertino_icons`: High-clarity vector icons.
+  - `http`: Asynchronous REST client with automatic timeout and multi-host resolution.
 
 ### Backend (Node.js REST API)
 - **Architecture:** Pure modular Node.js (`backend/src/`)
@@ -127,14 +124,15 @@ SankarGrpup-FlutterAPP/
 │           └── cors.js                  # CORS & JSON body parser
 │
 ├── docs/
-│   └── media/                           # Screenshots and demo video recording
-│       ├── app_demo_walkthrough.mp4     # App video walkthrough
+│   └── media/                           # Screenshots and demo walkthrough
+│       ├── app_demo_walkthrough.gif     # Auto-playing walkthrough demo
+│       ├── app_demo_walkthrough.mp4     # Original walkthrough video
 │       ├── login_screen.jpeg            # Sign In & Sign Up screen
 │       ├── otp_verification.jpeg        # 4-Digit OTP verification
 │       ├── home_dashboard.jpeg          # Home dashboard overview
 │       ├── packages_listing.jpeg        # Solar packages catalog
 │       ├── savings_calculator.jpeg      # Estimator & savings calculator
-│       └── profile_screen.jpeg          # iOS Profile & settings
+│       └── profile_screen.jpeg          # Profile & settings
 │
 └── sankargrp_app/                       # Flutter Mobile Application
     ├── android/                         # Android native config & splash screens
@@ -146,7 +144,7 @@ SankarGrpup-FlutterAPP/
     │   │   └── solar_api_service.dart   # Multi-candidate HTTP API client
     │   ├── widgets/
     │   │   ├── custom_button.dart       # Tactile button with spring feedback
-    │   │   ├── custom_text_field.dart   # Apple-style text field
+    │   │   ├── custom_text_field.dart   # Styled text field
     │   │   ├── responsive.dart          # Adaptive layout breakpoints
     │   │   └── solar_panel_illustration.dart # Custom vector solar artwork
     │   └── screens/
@@ -158,8 +156,8 @@ SankarGrpup-FlutterAPP/
     │       ├── dashboard/
     │       │   ├── main_dashboard_screen.dart # Liquid glass scaffold & tabs
     │       │   └── widgets/
-    │       │       ├── home_dashboard_view.dart # Reference-matching dashboard
-    │       │       └── ios_profile_view.dart    # Apple HIG profile & settings
+    │       │       ├── home_dashboard_view.dart # Solar dashboard overview
+    │       │       └── profile_view.dart        # Profile & settings view
     │       ├── listing/
     │       │   └── listing_screen.dart  # Filterable solar catalog
     │       └── details/
@@ -239,7 +237,7 @@ flutter run
    - Explore technical specs, hardware breakdown, and warranties.
    - Tap **"Book Site Visit"** to trigger the engineering site visit scheduling sheet.
 
-5. **Screen 5 (iOS Profile Screen):**
+5. **Screen 5 (Profile Screen):**
    - Switch to the **Profile** tab to view lifetime energy metrics, toggle telemetry alerts, and manage account session.
 
 6. **Error & Retry Handling Verification:**
@@ -251,8 +249,8 @@ flutter run
 ---
 
 ## 🎨 UI Design & Accessibility Highlights
-- **Apple Fluid Principles:** Instant pointer-down feedback, smooth cubic bezier and spring physics, zero input lockout.
-- **Frosted Liquid Glass Bar:** High-blur translucent refractive navigation bar (`blur: 16.0`) with active yellow Cupertino icons and sans-serif titles.
+- **Fluid Motion Principles:** Instant pointer-down feedback, smooth curves and spring physics, zero input lockout.
+- **Frosted Liquid Glass Bar:** High-blur translucent refractive navigation bar (`blur: 16.0`) with active yellow icons and sans-serif titles.
 - **Zero Yellow Text Underlines:** Clean typography hierarchy with `SF Pro Display` font weights and explicit text decoration styling.
 - **Clean Architecture:** Strict separation between presentation, state, domain models, and API data sources.
 

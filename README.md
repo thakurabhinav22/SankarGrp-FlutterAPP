@@ -5,7 +5,9 @@
 > **Company:** Sankar Group  
 > **Brand Selected:** Mierae Solar (Clean & Renewable Energy Solutions)  
 > **Author:** Abhinav  
-> **Repository:** [https://github.com/thakurabhinav22/SankarGrpup-FlutterAPP](https://github.com/thakurabhinav22/SankarGrpup-FlutterAPP)
+> **Repository:** [https://github.com/thakurabhinav22/SankarGrpup-FlutterAPP](https://github.com/thakurabhinav22/SankarGrpup-FlutterAPP)  
+>
+> 📲 **[DOWNLOAD RELEASE APK (app-release.apk)](https://github.com/thakurabhinav22/SankarGrpup-FlutterAPP/raw/main/docs/apk/app-release.apk)** 🚀 *(Pre-built Android Release Package ~49 MB)*
 
 ---
 

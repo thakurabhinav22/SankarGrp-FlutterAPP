@@ -205,12 +205,24 @@ adb reverse tcp:3000 tcp:3000
 
 ---
 
-### Step 3: Run the Flutter App
-Open a new terminal:
+### Step 3: Run the Flutter App or Install the Built Release APK
+
+#### Option A: Install Built Release APK (Pre-built & Ready)
+The standalone release APK is already compiled and ready for installation:
+- **APK File Location:** `sankargrp_app/build/app/outputs/flutter-apk/app-release.apk` (Size: ~49 MB)
+
+Install directly to your connected Android phone via ADB:
+```bash
+adb install sankargrp_app/build/app/outputs/flutter-apk/app-release.apk
+```
+
+#### Option B: Build or Run from Source
 ```bash
 cd sankargrp_app
 flutter pub get
-flutter run
+flutter run --release
+# Or to rebuild the release APK manually:
+flutter build apk --release
 ```
 
 ---

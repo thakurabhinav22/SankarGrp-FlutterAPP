@@ -7,7 +7,7 @@ import 'package:sankargrp_app/screens/auth/widgets/mierae_brand_header.dart';
 import 'package:sankargrp_app/screens/auth/widgets/auth_segmented_control.dart';
 import 'package:sankargrp_app/screens/auth/widgets/guest_button.dart';
 import 'package:sankargrp_app/screens/auth/widgets/eco_friendly_background.dart';
-import 'package:sankargrp_app/screens/guest/guest_dashboard_screen.dart';
+import 'package:sankargrp_app/screens/dashboard/main_dashboard_screen.dart';
 
 class AuthScreen extends StatefulWidget {
   final bool initialIsLogin;
@@ -75,23 +75,21 @@ class _AuthScreenState extends State<AuthScreen> {
     }
 
     setState(() => _isLoading = true);
-    await Future.delayed(const Duration(milliseconds: 600));
+    await Future.delayed(const Duration(milliseconds: 500));
     if (!mounted) return;
     setState(() => _isLoading = false);
 
-    showCupertinoDialog(
-      context: context,
-      builder: (ctx) => CupertinoAlertDialog(
-        title: Text(_isLogin ? 'Welcome Back' : 'Account Created'),
-        content: Text(_isLogin
-            ? 'Signed in successfully!'
-            : 'Welcome to Mierae Solar!'),
-        actions: [
-          CupertinoDialogAction(
-            child: const Text('OK'),
-            onPressed: () => Navigator.of(ctx).pop(),
-          ),
-        ],
+    final enteredName = _nameController.text.trim();
+    final displayName = enteredName.isNotEmpty
+        ? enteredName
+        : (_isLogin ? 'Solar Partner' : 'New Member');
+
+    Navigator.of(context).pushReplacement(
+      CupertinoPageRoute(
+        builder: (_) => MainDashboardScreen(
+          isGuest: false,
+          userName: displayName,
+        ),
       ),
     );
   }
@@ -319,8 +317,10 @@ class _AuthScreenState extends State<AuthScreen> {
                               onPressed: () {
                                 Navigator.of(context).pushReplacement(
                                   CupertinoPageRoute(
-                                    builder: (_) =>
-                                        const GuestDashboardScreen(),
+                                    builder: (_) => const MainDashboardScreen(
+                                      isGuest: true,
+                                      userName: 'Guest User',
+                                    ),
                                   ),
                                 );
                               },

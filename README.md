@@ -9,6 +9,27 @@
 
 ---
 
+## 🎥 App Demonstration Video & Live Screenshots
+
+### 📹 Video Walkthrough
+Watch the end-to-end demo of authentication, OTP verification, live solar radiation weather cards, interactive category filtering, technical hardware details, and the frosted liquid glass navigation bar:
+
+▶️ **Video File:** [docs/media/app_demo_walkthrough.mp4](docs/media/app_demo_walkthrough.mp4)
+
+---
+
+### 📸 Application Screenshots Gallery
+
+| 1. Sign In / Sign Up | 2. 4-Digit OTP Verification | 3. Live Home Dashboard |
+| :---: | :---: | :---: |
+| <img src="docs/media/screenshot_01.jpeg" width="260" alt="Sign In and Sign Up Screen"/> | <img src="docs/media/screenshot_02.jpeg" width="260" alt="4-Digit OTP Verification"/> | <img src="docs/media/screenshot_03.jpeg" width="260" alt="Home Dashboard Overview"/> |
+
+| 4. Solar Packages Listing | 5. Technical Details Page | 6. iOS Profile & Settings |
+| :---: | :---: | :---: |
+| <img src="docs/media/screenshot_04.jpeg" width="260" alt="Solar Packages Listing"/> | <img src="docs/media/screenshot_05.jpeg" width="260" alt="Technical Specifications and Booking"/> | <img src="docs/media/screenshot_06.jpeg" width="260" alt="iOS Profile and Telemetry Settings"/> |
+
+---
+
 ## 📌 Executive Summary
 
 **Mierae Solar** is a mobile application built for **Sankar Group** to digitalize rooftop solar adoption for residential, commercial, and agricultural users. The application delivers an Apple Human Interface Guideline (HIG) inspired user experience featuring a translucent **Liquid Glass navigation bar**, live **solar radiation weather analytics**, interactive **savings estimators**, **real OTP authentication**, and seamless **REST API integration** backed by a custom Node.js server.
@@ -20,7 +41,7 @@
 | Task | Requirement | Status | Implementation Details |
 | :--- | :--- | :---: | :--- |
 | **Task 1: Design & Setup** | Clean UI, custom splash screen, login/signup, Android responsiveness | ✅ Done | Apple-inspired theme, sans-serif typography (`SF Pro Display`), seamless launch splash without Android 12 blank delay, responsive screen adaptivity. |
-| **Task 2: Core Screens** | At least 4 functional screens | ✅ Done | **1.** Auth Screen (Login/Sign Up + 4-digit PIN OTP Verification)<br>**2.** Home Dashboard (Weather, solar radiation, quick actions, savings banner)<br>**3.** Solar Packages Listing (Filtering, live search, categories)<br>**4.** Details Screen (Full technical specs, hardware breakdown, booking modal). |
+| **Task 2: Core Screens** | At least 4 functional screens | ✅ Done | **1.** Auth Screen (Login/Sign Up + 4-digit PIN OTP Verification)<br>**2.** Home Dashboard (Weather, solar radiation, quick actions, savings banner)<br>**3.** Solar Packages Listing (Filtering, live search, categories)<br>**4.** Details Screen (Full technical specs, hardware breakdown, booking modal)<br>**5.** iOS Profile Screen (Grouped telemetry, toggles, warranty). |
 | **Task 3: Functionality** | Navigation, input validation, search/filtering, state management | ✅ Done | Cupertino fluid page routes, regex phone/name validators, dynamic category filter, live search, haptic feedback on every tap. |
 | **Task 4: API Integration** | REST backend, dynamic data, loading states, error handling | ✅ Done | Custom modular Node.js REST API (`/api/solar-systems`, `/api/dashboard/summary`, `/api/auth/*`), zero mock silent fallback, Cupertino error cards with retry. |
 | **Task 5: Data Management** | Persistence, reusable widgets, clean architecture | ✅ Done | Session management, modular component breakdown (`widgets/`, `models/`, `services/`, `screens/`). |
@@ -46,7 +67,7 @@
 - **Recent Requests Strip:** Interactive tracker for site visits, engineering designs, and net-metering applications.
 
 ### 3. Solar Packages Listing Screen
-- Category tabs: **All**, **Rooftop Residential**, **Hybrid / Uninterrupted**, **Commercial**, and **Agricultural**.
+- Category tabs: **All Packages**, **Residential**, **Hybrid & Battery**, **Commercial**, and **Agriculture**.
 - Live interactive search bar.
 - Pull-to-refresh (`CupertinoSliverRefreshControl`).
 - Dynamic package cards displaying capacity, price, government subsidy eligibility, and daily generation.
@@ -57,6 +78,11 @@
 - **Technical Specifications:** Clean table with system capacity, inverter type, grid synchronization, and roof space requirements.
 - **Engineered Hardware:** Highlighting Mono PERC / TopCon bifacial solar panels and IP65 dual-MPPT inverters.
 - **Interactive Sticky Bar:** Price summary with a **"Book Site Visit"** button opening an iOS modal sheet to schedule a rooftop inspection.
+
+### 5. iOS Profile & Settings Screen
+- **User Hero Card:** Verified member status, DISCOM connection identifier, and consumer number.
+- **Telemetry Metrics:** Lifetime generation (`14.2 MWh`), CO₂ offset (`12.8 Tons`), and financial savings.
+- **Grouped Inset Lists:** Native `CupertinoSwitch` toggles for grid telemetry alerts, peak tariff optimization, and biometric lock.
 
 ---
 
@@ -93,6 +119,16 @@ SankarGrpup-FlutterAPP/
 │       └── middleware/
 │           └── cors.js                  # CORS & JSON body parser
 │
+├── docs/
+│   └── media/                           # Screenshots and demo video recording
+│       ├── app_demo_walkthrough.mp4     # App video walkthrough
+│       ├── screenshot_01.jpeg           # Auth screen
+│       ├── screenshot_02.jpeg           # OTP screen
+│       ├── screenshot_03.jpeg           # Home dashboard
+│       ├── screenshot_04.jpeg           # Packages listing
+│       ├── screenshot_05.jpeg           # Details screen
+│       └── screenshot_06.jpeg           # Profile screen
+│
 └── sankargrp_app/                       # Flutter Mobile Application
     ├── android/                         # Android native config & splash screens
     ├── lib/
@@ -115,7 +151,8 @@ SankarGrpup-FlutterAPP/
     │       ├── dashboard/
     │       │   ├── main_dashboard_screen.dart # Liquid glass scaffold & tabs
     │       │   └── widgets/
-    │       │       └── home_dashboard_view.dart # Reference-matching dashboard
+    │       │       ├── home_dashboard_view.dart # Reference-matching dashboard
+    │       │       └── ios_profile_view.dart    # Apple HIG profile & settings
     │       ├── listing/
     │       │   └── listing_screen.dart  # Filterable solar catalog
     │       └── details/
@@ -188,14 +225,17 @@ flutter run
 
 3. **Screen 3 (Solar Listing):**
    - Switch to the **Packages** tab from the bottom liquid glass bar.
-   - Filter by categories (**Residential**, **Hybrid**, **Commercial**, **Agriculture**) or use the search bar.
+   - Filter by categories (**Residential**, **Hybrid & Battery**, **Commercial**, **Agriculture**) or use the live search bar.
 
 4. **Screen 4 (Details Screen):**
    - Tap **"View"** on any solar package card.
    - Explore technical specs, hardware breakdown, and warranties.
    - Tap **"Book Site Visit"** to trigger the engineering site visit scheduling sheet.
 
-5. **Error & Retry Handling Verification:**
+5. **Screen 5 (iOS Profile Screen):**
+   - Switch to the **Profile** tab to view lifetime energy metrics, toggle telemetry alerts, and manage account session.
+
+6. **Error & Retry Handling Verification:**
    - Stop the backend server (`Ctrl + C` in the backend terminal).
    - Pull-to-refresh on the app.
    - A dedicated server connection error card will appear with a **"Retry Connection"** button (no silent mock data substitution).
@@ -205,8 +245,8 @@ flutter run
 
 ## 🎨 UI Design & Accessibility Highlights
 - **Apple Fluid Principles:** Instant pointer-down feedback, smooth cubic bezier and spring physics, zero input lockout.
-- **Liquid Glass Bar:** Translucent refractive navigation bar using `liquid_glass_widgets` with active yellow Cupertino icons and sans-serif titles.
-- **Zero Yellow Text Underlines:** Clean typography hierarchy with `SF Pro Display` font weights.
+- **Frosted Liquid Glass Bar:** High-blur translucent refractive navigation bar (`blur: 16.0`) with active yellow Cupertino icons and sans-serif titles.
+- **Zero Yellow Text Underlines:** Clean typography hierarchy with `SF Pro Display` font weights and explicit text decoration styling.
 - **Clean Architecture:** Strict separation between presentation, state, domain models, and API data sources.
 
 ---

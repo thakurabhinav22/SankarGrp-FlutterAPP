@@ -5,28 +5,35 @@
 > **Company:** Sankar Group  
 > **Brand Selected:** Mierae Solar (Clean & Renewable Energy Solutions)  
 > **Author:** Abhinav  
-> **Repository:** [https://github.com/thakurabhinav22/SankarGrp-FlutterAPP](https://github.com/thakurabhinav22/SankarGrp-FlutterAPP)
+> **Repository:** [https://github.com/thakurabhinav22/SankarGrpup-FlutterAPP](https://github.com/thakurabhinav22/SankarGrpup-FlutterAPP)
 
 ---
 
 ## 🎥 App Demonstration Video & Live Screenshots
 
-### 📹 Video Walkthrough
+### 📹 Remote Video Walkthrough
 Watch the end-to-end demo of authentication, OTP verification, live solar radiation weather cards, interactive category filtering, technical hardware details, and the frosted liquid glass navigation bar:
 
-▶️ **Video File:** [docs/media/app_demo_walkthrough.mp4](docs/media/app_demo_walkthrough.mp4)
+- **Direct GitHub Video Link:** [docs/media/app_demo_walkthrough.mp4](https://github.com/thakurabhinav22/SankarGrpup-FlutterAPP/raw/main/docs/media/app_demo_walkthrough.mp4)
+- **Local File Path:** [docs/media/app_demo_walkthrough.mp4](docs/media/app_demo_walkthrough.mp4)
+
+<p align="center">
+  <video src="https://github.com/thakurabhinav22/SankarGrpup-FlutterAPP/raw/main/docs/media/app_demo_walkthrough.mp4" width="340" controls="controls" poster="docs/media/home_dashboard.jpeg">
+    Your browser does not support the video tag. View the raw MP4 video <a href="https://github.com/thakurabhinav22/SankarGrpup-FlutterAPP/raw/main/docs/media/app_demo_walkthrough.mp4">here</a>.
+  </video>
+</p>
 
 ---
 
 ### 📸 Application Screenshots Gallery
 
-| 1. Sign In / Sign Up | 2. 4-Digit OTP Verification | 3. Live Home Dashboard |
+| 1. Sign In & Sign Up | 2. 4-Digit OTP Verification | 3. Live Home Dashboard |
 | :---: | :---: | :---: |
-| <img src="docs/media/screenshot_01.jpeg" width="260" alt="Sign In and Sign Up Screen"/> | <img src="docs/media/screenshot_02.jpeg" width="260" alt="4-Digit OTP Verification"/> | <img src="docs/media/screenshot_03.jpeg" width="260" alt="Home Dashboard Overview"/> |
+| <img src="docs/media/login_screen.jpeg" width="260" alt="Sign In and Sign Up Screen"/> | <img src="docs/media/otp_verification.jpeg" width="260" alt="4-Digit OTP Verification"/> | <img src="docs/media/home_dashboard.jpeg" width="260" alt="Home Dashboard Overview"/> |
 
-| 4. Solar Packages Listing | 5. Technical Details Page | 6. iOS Profile & Settings |
+| 4. Solar Packages Listing | 5. Savings Calculator | 6. iOS Profile & Settings |
 | :---: | :---: | :---: |
-| <img src="docs/media/screenshot_04.jpeg" width="260" alt="Solar Packages Listing"/> | <img src="docs/media/screenshot_05.jpeg" width="260" alt="Technical Specifications and Booking"/> | <img src="docs/media/screenshot_06.jpeg" width="260" alt="iOS Profile and Telemetry Settings"/> |
+| <img src="docs/media/packages_listing.jpeg" width="260" alt="Solar Packages Listing"/> | <img src="docs/media/savings_calculator.jpeg" width="260" alt="Solar Savings Estimator and Calculator"/> | <img src="docs/media/profile_screen.jpeg" width="260" alt="iOS Profile and Telemetry Settings"/> |
 
 ---
 
@@ -122,12 +129,12 @@ SankarGrpup-FlutterAPP/
 ├── docs/
 │   └── media/                           # Screenshots and demo video recording
 │       ├── app_demo_walkthrough.mp4     # App video walkthrough
-│       ├── screenshot_01.jpeg           # Auth screen
-│       ├── screenshot_02.jpeg           # OTP screen
-│       ├── screenshot_03.jpeg           # Home dashboard
-│       ├── screenshot_04.jpeg           # Packages listing
-│       ├── screenshot_05.jpeg           # Details screen
-│       └── screenshot_06.jpeg           # Profile screen
+│       ├── login_screen.jpeg            # Sign In & Sign Up screen
+│       ├── otp_verification.jpeg        # 4-Digit OTP verification
+│       ├── home_dashboard.jpeg          # Home dashboard overview
+│       ├── packages_listing.jpeg        # Solar packages catalog
+│       ├── savings_calculator.jpeg      # Estimator & savings calculator
+│       └── profile_screen.jpeg          # iOS Profile & settings
 │
 └── sankargrp_app/                       # Flutter Mobile Application
     ├── android/                         # Android native config & splash screens
